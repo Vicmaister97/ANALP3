@@ -1,6 +1,6 @@
 /***********************************************/
-/* Programa: ejercicio1     Fecha:             */
-/* Autores:                                    */
+/* Programa: ejercicio1     Fecha: 25/11/2016  */
+/* Autores: Alfonso Villar y Víctor García     */
 /*                                             */
 /* Programa que comprueba el funcionamiento de */
 /* la busqueda lineal                          */
@@ -12,13 +12,13 @@
 /* Salida: 0: OK, -1: ERR                      */
 /***********************************************/
 
-#include<stdlib.h>
-#include<stdio.h>
-#include<string.h>
-#include<time.h>
-
-#include "ordenar.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <time.h>
+#include "ordenacion.h"
 #include "busqueda.h"
+#include "permutaciones.h"
 
 int main(int argc, char** argv)
 {
@@ -39,8 +39,8 @@ int main(int argc, char** argv)
   }
 
   printf("Practica numero 3, apartado 1\n");
-  printf("Realizada por: Vuestros nombres\n");
-  printf("Grupo: Vuestro grupo\n");
+  printf("Realizada por: Alfonso Villar y Víctor García\n");
+  printf("Grupo: 12\n");
 
   /* comprueba la linea de comandos */
   for(i = 1; i < argc; i++) {
@@ -80,7 +80,7 @@ int main(int argc, char** argv)
     exit(-1);
   }
 
-  nob = busca_diccionario(pdicc,clave,&pos,blin);
+  nob = busca_diccionario(pdicc,clave,&pos,bbin);
 
   if(nob >= 0) {
     printf("Clave %d encontrada en la posicion %d en %d op. basicas\n",clave,pos,nob);

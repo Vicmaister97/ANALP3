@@ -5,7 +5,7 @@
 
 CC = gcc -ansi -pedantic
 CFLAGS = -Wall -g
-EXE = ejercicio1 ejercicio2 ejercicio3 ejercicio4 ejercicio5 ejercicio6
+EXE = ejercicio1
 
 all : $(EXE)
 
@@ -20,9 +20,9 @@ clean :
 	@echo "# Ha cambiado $<"
 	$(CC) $(CFLAGS) -c $<
 
-$(EXE) : % : %.o ordenacion.o permutaciones.o tiempos.o
+$(EXE) : % : %.o busqueda.o ordenacion.o permutaciones.o tiempos.o
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -o $@ $@.o ordenacion.o permutaciones.o tiempos.o
+	$(CC) $(CFLAGS) -o $@ $@.o busqueda.o ordenacion.o permutaciones.o tiempos.o

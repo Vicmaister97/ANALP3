@@ -10,8 +10,9 @@
  */
 
 #include "busqueda.h"
-
+#include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <math.h>
 
 /**
@@ -79,20 +80,16 @@ PDICC ini_diccionario (int tamanio, char orden)
 
 void libera_diccionario(PDICC pdicc)
 {
-	assert (pdicc);
+	assert (pdicc != NULL);
 
-	int i;
-	for (i = 0; i < pdicc->n_datos; i++){
-		free (pdicc->tabla[i]);
-	}
+	free (pdicc->tabla);
 	free (pdicc);
 	return;
 }
 
 int inserta_diccionario(PDICC pdicc, int clave)
 {
-	assert (pdicc);
-	assert (clave >= 0);
+	assert (pdicc != NULL && clave >= 0);
 
 	if (pdicc->tamanio == pdicc->n_datos)
 		return ERR;
@@ -120,10 +117,7 @@ int inserta_diccionario(PDICC pdicc, int clave)
 
 int insercion_masiva_diccionario (PDICC pdicc,int *claves, int n_claves)
 {
-	assert (pdicc);
-	assert (claves);
-	assert (n_claves >= (pdicc->tamanio - pdicc->n_datos));
-	assert (n_claves >= 1);
+	assert (pdicc != NULL && claves != NULL && n_claves >= (pdicc->tamanio - pdicc->n_datos) && n_claves >= 1);
 
 	int i;
 
@@ -136,10 +130,7 @@ int insercion_masiva_diccionario (PDICC pdicc,int *claves, int n_claves)
 
 int busca_diccionario(PDICC pdicc, int clave, int *ppos, pfunc_busqueda metodo)
 {
-	assert (pdicc);
-	assert (clave >= 0);
-	if (metodo != bbin && metodo != blin && metodo != blin_auto)
-		return ERR;
+	assert(pdicc != NULL && clave >= 0);
 
 	if (metodo(pdicc->tabla, 0, pdicc->n_datos-1, clave, ppos) == ERR)
 		return ERR;
@@ -149,7 +140,7 @@ int busca_diccionario(PDICC pdicc, int clave, int *ppos, pfunc_busqueda metodo)
 
 void imprime_diccionario(PDICC pdicc)
 {
-	assert (pdicc);
+	assert(pdicc != NULL);
 
 	int i;
 	for (i = 0; i < pdicc->n_datos; i++){
@@ -159,19 +150,66 @@ void imprime_diccionario(PDICC pdicc)
 }
 
 /* Funciones de busqueda del TAD Diccionario */
-int bbin(int *tabla,int P,int U,int clave,int *ppos)
+
+int bbin(int *tabla, int P, int U, int clave, int *ppos)
 {
-	/* vuestro codigo */
+	assert (tabla != NULL && P <= U && clave >= 0);
+
+	return bbin_rec (tabla, P, U, clave, ppos);
 }
 
-int blin(int *tabla,int P,int U,int clave,int *ppos)
-{
-	/* vuestro codigo */
+int bbin_rec(int *tabla, int P, int U, int clave, int *ppos){
+	int m = (int) (P + U) / 2;
+
+	if (tabla[m] == clave){
+		ppos = &(tabla[m]);
+		return tabla[m];
+	}
+
+	if (clave < tabla[m] && P <= (m-1)){
+		return bbin_rec (tabla, P, m-1, clave, ppos);
+	}
+
+	if (clave > tabla[m] && m+1 <= U){
+		return bbin_rec (tabla, m+1, U, clave, ppos);
+	}
+
+	return NO_ENCONTRADO;
 }
 
-int blin_auto(int *tabla,int P,int U,int clave,int *ppos)
-{
-	/* vuestro codigo */
+
+int blin(int *tabla,int P,int U,int clave,int *ppos){
+	assert (tabla != NULL && P <= U && clave >= 0);
+
+	int i;
+	for (i = P; i <= U; i++){
+		if (tabla[i] == clave){
+			ppos = &(tabla[i]);
+			return OK;
+		}
+	}
+
+	return NO_ENCONTRADO;
 }
 
+int blin_auto(int *tabla,int P,int U,int clave,int *ppos){
+	assert (tabla != NULL && P <= U && clave >= 0);
+	int aux;
+	int i;
 
+	for (i = P; i <= U; i++){
+		if (tabla[i] == clave){
+			if (i == P){
+				ppos = &(tabla[i]);
+				return OK;
+			}
+			aux = tabla[i];
+			tabla[i] = tabla [i-1];
+			tabla[i-1] = aux;
+			ppos = &(tabla[i]);
+			return OK;
+		}
+	}
+
+	return NO_ENCONTRADO;
+}
