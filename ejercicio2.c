@@ -34,23 +34,22 @@ int main(int argc, char** argv)
  
   srand(time(NULL));
 
-  if (argc != 13) {
+  if (argc != 11) {
     fprintf(stderr, "Error en los parametros de entrada:\n\n");
     fprintf(stderr, "%s -num_min <int> -num_max <int> -incr <int>\n", argv[0]);
-    fprintf(stderr, "\t\t -n_claves <int> -n_veces <int> -fichSalida <string> \n");
+    fprintf(stderr, "\t\t -n_veces <int> -fichSalida <string> \n");
     fprintf(stderr, "Donde:\n");
     fprintf(stderr, "-num_min: numero minimo de elementos de la tabla\n");
     fprintf(stderr, "-num_max: numero minimo de elementos de la tabla\n");
     fprintf(stderr, "-incr: incremento\n");
-    fprintf(stderr, "-n_claves: numero de claves a buscar.\n");
     fprintf(stderr, "-n_veces: numero de veces que se busca cada clave\n");
     fprintf(stderr, "-fichSalida: Nombre del fichero de salida\n");
     exit(-1);
   }
 
   printf("Practica numero 3, apartado 2\n");
-  printf("Realizada por: Vuestros nombres\n");
-  printf("Grupo: Vuestro grupo\n");
+  printf("Realizada por: Alfonso Villar y Víctor García\n");
+  printf("Grupo: 12\n");
 
   /* comprueba la linea de comandos */
   for(i = 1; i < argc ; i++) {

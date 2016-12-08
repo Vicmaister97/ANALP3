@@ -16,7 +16,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-#include "ordenacion.h"
 #include "busqueda.h"
 #include "permutaciones.h"
 
@@ -80,7 +79,7 @@ int main(int argc, char** argv)
     exit(-1);
   }
 
-  nob = busca_diccionario(pdicc,clave,&pos,bbin);
+  nob = busca_diccionario(pdicc,clave,&pos,blin);
 
   if(nob >= 0) {
     printf("Clave %d encontrada en la posicion %d en %d op. basicas\n",clave,pos,nob);

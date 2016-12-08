@@ -16,6 +16,7 @@
 #include "tiempos.h"
 #include "ordenacion.h"
 #include "permutaciones.h"
+#include "busqueda.h"
 
 /***************************************************/
 /* Funcion: tiempo_medio_ordenacion Fecha:12/10/16 */
@@ -51,7 +52,7 @@ short tiempo_medio_ordenacion(pfunc_ordena metodo,
 	}
 	ini = clock(); /*ini = clock_gettime(); */
 	for (i = 0; i < n_perms; i++){
-		int ob = metodo(perms[i], 0, tamanio - 1);
+		ob = metodo(perms[i], 0, tamanio - 1);
 		if (ob == ERR)
 			return ERR;
 		if (max_ob < ob) /*Comparamos OB iterativamente con max_ob para actualizar el numero maximo de OB*/
@@ -163,5 +164,101 @@ short guarda_tabla_tiempos(char* fichero, PTIEMPO tiempo, int N){
 	}
 	
 	fclose(fp);
+	return OK;
+}
+
+
+/*CABECERAAAAAAAAAA*/
+
+short genera_tiempos_busqueda(pfunc_busqueda metodo, pfunc_generador_claves generador, 
+                                int orden, char* fichero, int num_min, int num_max, 
+                                int incr, int n_veces){
+
+	int i;
+	int iteraciones;
+	iteraciones = (int)((num_max-num_min)/(incr))+1;
+	PTIEMPO ptiempo;
+	ptiempo = (PTIEMPO) malloc (iteraciones * (sizeof (TIEMPO)));
+	if (ptiempo == NULL)
+		return ERR;
+
+	for (i = 0; i < iteraciones; i++){
+		if (tiempo_medio_busqueda(metodo, generador, orden, num_min+i*incr, n_veces, &ptiempo[i]) == ERR){
+			free(ptiempo);
+			return ERR;
+		}
+	}
+
+	if (guarda_tabla_tiempos (fichero, ptiempo, i) == ERR){
+		free(ptiempo);
+		return ERR;
+		}
+
+	free(ptiempo);
+	return OK;
+}
+
+
+
+/*CABECERAAAAAAAAAA*/
+
+short tiempo_medio_busqueda(pfunc_busqueda metodo, pfunc_generador_claves generador, int orden, 
+                              int n_claves, int n_veces, PTIEMPO ptiempo){
+
+	int ob = 0;
+	int i, pos;
+	int medio_ob = 0;
+	int max_ob = 0;
+	int min_ob = INT_MAX;
+	clock_t ini, fin;
+
+	PDICC pdicc = ini_diccionario (n_claves, orden);
+	if (pdicc == NULL) return ERR;
+
+	int* perm = genera_perm(n_claves);
+	if (perm == NULL){
+		libera_diccionario (pdicc);
+		return ERR;
+	}
+
+	if (insercion_masiva_diccionario(pdicc, perm, n_claves) == ERR){
+		libera_diccionario (pdicc);
+		free (perm);
+		return ERR;
+	}
+
+	int* tabla = (int*) malloc (sizeof (int) * n_claves * n_veces);
+	if (tabla == NULL){
+		libera_diccionario (pdicc);
+		free (perm);
+		return ERR;
+	}
+
+	generador (tabla, n_claves*n_veces, n_claves);
+
+	ini = clock();
+	for (i = 0; i < n_claves*n_veces; i++){
+		ob = busca_diccionario(pdicc, tabla[i], &pos, metodo);
+		if (ob == ERR)
+			return ERR;
+		if (max_ob < ob) /*Comparamos OB iterativamente con max_ob para actualizar el numero maximo de OB*/
+			max_ob = ob;
+		if (min_ob > ob)/*Comparamos OB iterativamente con min_ob para actualizar el numero minimo de OB*/
+			min_ob = ob;
+		medio_ob += ob;
+
+	}
+	fin = clock();
+	ptiempo->n_perms = n_claves;
+	ptiempo->tamanio = n_claves;
+	ptiempo->medio_ob = (double) medio_ob / n_claves / n_veces;
+	ptiempo->max_ob = max_ob;
+	ptiempo->min_ob = min_ob;
+	ptiempo->tiempo = (double) (fin - ini) / n_claves / n_veces / CLOCKS_PER_SEC;
+	ptiempo->n_veces = ob;
+
+	libera_diccionario (pdicc);
+	free (tabla);
+	free (perm);
 	return OK;
 }
