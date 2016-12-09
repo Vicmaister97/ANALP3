@@ -164,7 +164,7 @@ int bbin(int *tabla, int P, int U, int clave, int *ppos)
 
 	if (tabla[m] == clave){
 		*ppos = m;
-		return 0;
+		return 1;
 	}
 
 	if (clave < tabla[m]){
@@ -188,6 +188,7 @@ int blin(int *tabla,int P,int U,int clave,int *ppos){
 	for (i = P; i <= U; i++, cont++){
 		if (tabla[i] == clave){
 			*ppos = i;
+			cont++;
 			return cont;
 		}
 	}
@@ -203,7 +204,8 @@ int blin_auto(int *tabla,int P,int U,int clave,int *ppos){
 	for (i = P; i <= U; i++, cont++){
 		if (tabla[i] == clave){
 			if (i == P){
-				*ppos = i;	
+				*ppos = i;
+				cont++;
 				return cont;
 			}
 			tabla[i] = tabla [i-1];
