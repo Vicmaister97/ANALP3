@@ -1,0 +1,42 @@
+﻿Comandos GNUPlot
+
+
+titulo de la tabla:
+set title “titulo”
+
+Texto eje x:
+set xlabel "texto"
+
+Texto eje y;
+set ylabel "texto"
+ 
+Rango de valores del eje Y
+set yrange [0:1]
+
+Rango de valores del eje X
+set xrange [0:1]
+
+representar, con ficheros de solo dos columnas
+plot “nombre del fichero” with lines
+plot “nombre del fichero” with boxes
+plot “nombre del fichero” wl
+
+Añadir titulo a la recta
+plot “nombre del fichero” title “titulo de la funcion” with lines
+
+representar, con ficheros de mas de dos columnas
+plot “nombre del fichero” using 1:2 with lines
+
+fixing (esto es lo gordo)
+1. Vemos que tipo de funcion es la grafica: nlogn, n, polinomica, exponencial, etc
+2. Escribimos la forma general de una funcion de estas
+
+ejemplo:
+f = a * x * x + b * x + c (no existen exponentes, multiplicar x las veces necesarias)
+
+3. ajustar
+
+fit f “fichero” using 1:2 via a, b, c
+ 
+4. ignoramos las siguientes lineas y acabamos con:
+plot "fichero" using 1:2 with lines , f with lines 

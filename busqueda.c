@@ -4,8 +4,8 @@
  *
  * Fichero: busqueda.c
  * Autor: Alfonso Villar y Víctor García
- * Version: 1.0
- * Fecha: 18-11-2016
+ * Version: 2.5
+ * Fecha: 8-12-2016
  *
  */
 
@@ -31,6 +31,7 @@
  *               Esta fucnion genera todas las claves de 1 a max de forma 
  *               secuencial. Si n_claves==max entonces se generan cada clave
  *               una unica vez.
+ *				 Entradas: claves>0 y max>0
  */
 void generador_claves_uniforme(int *claves, int n_claves, int max)
 {
@@ -47,6 +48,7 @@ void generador_claves_uniforme(int *claves, int n_claves, int max)
  *               potencial. Siendo los valores mas pequenos mucho mas probables
  *               que los mas grandes. El valor 1 tiene una probabilidad del 50%,
  *               el dos del 17%, el tres el 9%, etc.
+ *				 Entradas: claves>0 y max>0
  */
 void generador_claves_potencial(int *claves, int n_claves, int max)
 {
@@ -59,6 +61,12 @@ void generador_claves_potencial(int *claves, int n_claves, int max)
   return;
 }
 
+
+/*
+*  Funcion: ini_diccionario
+*  				Esta funcion inicia el diccionario
+*               con un tamaño fijado y en un estado ordenado o desordenado
+*/
 PDICC ini_diccionario (int tamanio, char orden)
 {
 	if (tamanio < 1 || (orden != ORDENADO && orden != NO_ORDENADO))
@@ -79,6 +87,11 @@ PDICC ini_diccionario (int tamanio, char orden)
 	return dic;
 }
 
+
+/*
+*  Funcion: libera_diccionario
+*               Esta funcion libera el diccionario
+*/
 void libera_diccionario(PDICC pdicc)
 {
 	assert (pdicc != NULL);
@@ -88,20 +101,26 @@ void libera_diccionario(PDICC pdicc)
 	return;
 }
 
+
+/*
+*  Funcion: inserta_diccionario
+*               Esta funcion inserta una clave en el diccionario
+*               si esta ordenado lo coloca ordenado y si no al final de todo
+*/
 int inserta_diccionario(PDICC pdicc, int clave)
 {
-	int cont;
+	int cont = 0;
 	assert (pdicc != NULL && clave >= 0);
 
 	if (pdicc->tamanio == pdicc->n_datos)
 		return ERR;
 
-	if (pdicc->orden == NO_ORDENADO){
+	if (pdicc->orden == NO_ORDENADO){ /*Si el diccionario no es ordenado*/
 		pdicc->tabla[pdicc->n_datos] = clave;
 		pdicc->n_datos++;
 	}
 
-	else{
+	else{ /*Si el diccionario es ordenado*/
 		pdicc->tabla[pdicc->n_datos] = clave;
 		pdicc->n_datos++;
 		int last = pdicc->tabla[pdicc->n_datos-1];
@@ -119,6 +138,12 @@ int inserta_diccionario(PDICC pdicc, int clave)
 	return cont;
 }
 
+
+/*
+*  Funcion: isercion_masiva_diccionario
+*               Esta funcion inserta masivamente claves en el diccionario
+*               utilizando en bucle inserta_diccionario
+*/
 int insercion_masiva_diccionario (PDICC pdicc,int *claves, int n_claves)
 {
 	assert (pdicc != NULL && claves != NULL && n_claves >= (pdicc->tamanio - pdicc->n_datos) && n_claves >= 1);
@@ -132,6 +157,13 @@ int insercion_masiva_diccionario (PDICC pdicc,int *claves, int n_claves)
 	return OK;
 }
 
+
+/*
+*  Funcion: busca_diccionario
+*               Esta funcion busca una clave en el diccionario y 
+*               hará que ppos apunte al numero de la posicion de la clave
+*               utilizando un metodo de búsqueda definido por método
+*/
 int busca_diccionario(PDICC pdicc, int clave, int *ppos, pfunc_busqueda metodo)
 {
 	int cont;
@@ -142,6 +174,11 @@ int busca_diccionario(PDICC pdicc, int clave, int *ppos, pfunc_busqueda metodo)
 	return cont;
 }
 
+
+/*
+*  Funcion: imprime_diccionario
+*               Esta funcion imprime el diccionario
+*/
 void imprime_diccionario(PDICC pdicc)
 {
 	assert(pdicc != NULL);
@@ -155,6 +192,12 @@ void imprime_diccionario(PDICC pdicc)
 		
 /* Funciones de busqueda del TAD Diccionario */
 
+
+/*
+*  Funcion: bbin
+*               Esta es una funcion de busqueda en la cual
+*               se reduce el tamaño de la tabla a la mitad en cada cdc
+*/
 int bbin(int *tabla, int P, int U, int clave, int *ppos)
 {
 	assert (tabla != NULL && clave >= 0);
@@ -179,6 +222,11 @@ int bbin(int *tabla, int P, int U, int clave, int *ppos)
 }
 
 
+/*
+*  Funcion: blin
+*               Esta es una funcion de busqueda en la cual
+*               se busca de 1 en 1 por la tabla la clave linealmente
+*/
 int blin(int *tabla,int P,int U,int clave,int *ppos){
 	assert (tabla != NULL && P <= U && clave >= 0);
 
@@ -196,6 +244,13 @@ int blin(int *tabla,int P,int U,int clave,int *ppos){
 	return NO_ENCONTRADO;
 }
 
+
+/*
+*  Funcion: blin_auto
+*               Esta es una funcion de busqueda en la cual
+*               se busca de 1 en 1 por la tabla la clave linealmente
+*               y que cuando encuentra la clave hace un swap hacia delante
+*/
 int blin_auto(int *tabla,int P,int U,int clave,int *ppos){
 	assert (tabla != NULL && P <= U && clave >= 0);
 	int i;

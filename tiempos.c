@@ -3,7 +3,7 @@
  * Descripcion: Implementacion de funciones de tiempo
  *
  * Fichero: tiempos.c
- * Autor: Carlos Aguirre Maeso
+ * Autor: Alfonso Villar y Víctor García
  * Version: 1.0
  * Fecha: 16-09-2016
  *
@@ -168,7 +168,28 @@ short guarda_tabla_tiempos(char* fichero, PTIEMPO tiempo, int N){
 }
 
 
-/*CABECERAAAAAAAAAA*/
+/***************************************************/
+/* Funcion: genera_tiempos_busqueda Fecha:09/12/16 */
+/* Autores: Alfonso Villar y Víctor García         */
+/*                                                 */
+/* Entradas: fichero!=NULL & 0<num_min<=num_max &  */
+/* incr>0 & n_veces>0                              */
+/*												   */
+/* pfunc_busqueda metodo: introduce el metodo de   */
+/* busqueda a usar                                 */
+/* int n_veces: veces a ejecutar cada busqueda     */
+/* int incr: incremento del tamaño de la tabla     */
+/* int num_max: tamaño máximo de la tabla          */
+/* int num_min:tamaño mínimo de la tabla           */
+/* int fichero:fichero donde guardar los resultados*/
+/* int orden: indica si la tabla esta o no ordenada*/
+/* pfunc_generador_claves:introduce el metodo de   */
+/* generacion de claves                            */
+/*												   */
+/* Salida:                                         */
+/* Devuelve ERR si hay error u OK si no            */
+/*                                                 */ 
+/***************************************************/
 
 short genera_tiempos_busqueda(pfunc_busqueda metodo, pfunc_generador_claves generador, 
                                 int orden, char* fichero, int num_min, int num_max, 
@@ -200,7 +221,25 @@ short genera_tiempos_busqueda(pfunc_busqueda metodo, pfunc_generador_claves gene
 
 
 
-/*CABECERAAAAAAAAAA*/
+/***************************************************/
+/* Funcion: tiempo_medio_busqueda Fecha:09/12/16   */
+/* Autores: Alfonso Villar y Víctor García         */
+/*                                                 */
+/* Entradas: 0<num_min<=num_max & n_veces>0        */
+/*												   */
+/* pfunc_busqueda metodo: introduce el metodo de   */
+/* busqueda a usar                                 */
+/* int n_veces: veces a ejecutar cada busqueda     */
+/* int num_max: tamaño máximo de la tabla          */
+/* int num_min:tamaño mínimo de la tabla           */
+/* int orden: indica si la tabla esta o no ordenada*/
+/* pfunc_generador_claves:introduce el metodo de   */
+/* generacion de claves                            */
+/*                                                 */
+/* Salida:                                         */
+/* Devuelve ERR si hay error u OK si no            */
+/*                                                 */ 
+/***************************************************/
 
 short tiempo_medio_busqueda(pfunc_busqueda metodo, pfunc_generador_claves generador, int orden, 
                               int n_claves, int n_veces, PTIEMPO ptiempo){
@@ -243,7 +282,7 @@ short tiempo_medio_busqueda(pfunc_busqueda metodo, pfunc_generador_claves genera
 			return ERR;
 		if (max_ob < ob) /*Comparamos OB iterativamente con max_ob para actualizar el numero maximo de OB*/
 			max_ob = ob;
-		if (min_ob > ob)/*Comparamos OB iterativamente con min_ob para actualizar el numero minimo de OB*/
+		if (min_ob > ob) /*Comparamos OB iterativamente con min_ob para actualizar el numero minimo de OB*/
 			min_ob = ob;
 		medio_ob += ob;
 
